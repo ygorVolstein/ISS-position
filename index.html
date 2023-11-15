@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -16,50 +18,69 @@
         body {
             margin: 0;
             overflow-y: hidden;
-        }
-
-        canvas {
-            height: 100%;
-            display: block;
-        }
-
-        #particles-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
             background-image: url(espaço.jpg);
-            background-repeat: no-repeat;
             background-size: cover;
-            background-position: 100% 100%;
+            background-repeat: no-repeat;
         }
 
         #iss {
+            height: 30px;
             position: absolute;
-            left: 40%;
+            left: 50%;
             top: 50%
         }
 
         #earth_div {
             height: 100vh;
-            }
+        }
+
+        #box_informações {
+            position: absolute;
+            left: 5%;
+            top: 10%;
+            height: 100px;
+            width: 200px;
+        }
+
+        p {
+            margin: 0;
+        }
     </style>
 
 
-    <title>Leaflet JS - ISS Posição</title>
+    <title>Posição ISS</title>
 
     <script src="https://www.webglearth.com/v2/api.js"></script>
 
 </head>
 
 <body onload="initialize()">
-   
-        <div id="particles-container"></div>
 
-        <div id="earth_div"></div>
+    <div id="particles-container"></div>
 
-        <img src="iss.png" alt="" id="iss">
-    
+    <div id="earth_div"></div>
+
+    <img src="iss.png" alt="" id="iss">
+
+    <div id="box_informações">
+        <div class="card" style="width: 18rem;">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <p><b>Latitude</b>: <span id="lat"></span></p>
+                </li>
+                <li class="list-group-item">
+                    <p><b>Longitude</b>: <span id="lon"></span></p>
+                </li>
+                <li class="list-group-item">
+                    <p><b>Velocidade</b>: <span id="vel"></span></p>
+                </li>
+                <li class="list-group-item">
+                    <p><b>Altura</b>: <span id="alt"></span></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
 
     <script>
 
@@ -67,7 +88,7 @@
 
         function initialize() {
 
-            particlesJS.load('particles-container', 'particlesjs-config.json');
+
 
             map = new WE.map('earth_div');
 
@@ -88,16 +109,23 @@
             const dados = await fetch(endPoint);
             const dadosConvertidos = await dados.json();
             console.log(dadosConvertidos);
-            const { latitude, longitude } = dadosConvertidos;
+            const { latitude, longitude, altitude, velocity } = dadosConvertidos;
 
             map.setView([latitude, longitude]); // Atualize o mapa para a posição da ISS
+            document.getElementById('lat').innerHTML = latitude + '°';
+            document.getElementById('lon').innerHTML = longitude + '°';
+            document.getElementById('vel').innerHTML = Math.round(velocity) + ' Km/H';
+            document.getElementById('alt').innerHTML = altitude;
 
         } getIss();
 
-        setInterval(getIss, 1500);
+        setInterval(getIss, 1000);
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
 
 </body>
 
