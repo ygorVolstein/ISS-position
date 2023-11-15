@@ -56,8 +56,6 @@
 
 <body onload="initialize()">
 
-    <div id="particles-container"></div>
-
     <div id="earth_div"></div>
 
     <img src="iss.png" alt="" id="iss">
@@ -88,8 +86,6 @@
 
         function initialize() {
 
-
-
             map = new WE.map('earth_div');
 
             WE.tileLayer('https://webglearth.github.io/webglearth2-offline/{z}/{x}/{y}.jpg', {
@@ -101,7 +97,6 @@
                 tms: true
             }).addTo(map);
         }
-
 
         //Cosumo api
         const endPoint = 'https://api.wheretheiss.at/v1/satellites/25544';
