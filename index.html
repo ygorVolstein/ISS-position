@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+
+    <script src="https://www.webglearth.com/v2/api.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow-y: hidden;
+        }
+
+        canvas {
+            height: 100%;
+            display: block;
+        }
+
+        #particles-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            background-image: url(espaço.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 100% 100%;
+        }
+
+        #iss {
+            position: absolute;
+            left: 40%;
+            top: 50%
+        }
+
+        #earth_div {
+            height: 100vh;
+            }
+    </style>
+
+
+    <title>Leaflet JS - ISS Posição</title>
+
+    <script src="https://www.webglearth.com/v2/api.js"></script>
+
+</head>
+
+<body onload="initialize()">
+   
+        <div id="particles-container"></div>
+
+        <div id="earth_div"></div>
+
+        <img src="iss.png" alt="" id="iss">
+    
+
+    <script>
+
+        var map
+
+        function initialize() {
+
+            particlesJS.load('particles-container', 'particlesjs-config.json');
+
+            map = new WE.map('earth_div');
+
+            WE.tileLayer('https://webglearth.github.io/webglearth2-offline/{z}/{x}/{y}.jpg', {
+                tileSize: 256,
+                bounds: [[-85, -180], [85, 180]],
+                minZoom: 0,
+                maxZoom: 16,
+                attribution: 'WebGLEarth example',
+                tms: true
+            }).addTo(map);
+        }
+
+
+        //Cosumo api
+        const endPoint = 'https://api.wheretheiss.at/v1/satellites/25544';
+        async function getIss() {
+            const dados = await fetch(endPoint);
+            const dadosConvertidos = await dados.json();
+            console.log(dadosConvertidos);
+            const { latitude, longitude } = dadosConvertidos;
+
+            map.setView([latitude, longitude]); // Atualize o mapa para a posição da ISS
+
+        } getIss();
+
+        setInterval(getIss, 1500);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+</body>
+
+</html>
